@@ -1,0 +1,234 @@
+Starting IIS Express ...
+Initializing the W3 Server Started CTC = 256906265 
+W3 Server initializing WinSock.  CTC = 256906281 
+W3 Server WinSock initialized.  CTC = 256906281 
+W3 Server ThreadPool initialized (ipm has signalled).  CTC = 256906281 
+Start listenerChannel http:0
+Successfully registered URL "http://localhost:59387/" for site "Development Web Site" application "/"
+Registration completed
+AppPool 'IISExpressAppPool' initialized
+InitComplete event signalled
+IIS Express is running.
+Enter 'Q' to stop IIS Express
+IncrementMessages called
+Request started: "GET" http://localhost:59387/Default.aspx
+Response sent: http://localhost:59387/Default.aspx with HTTP status 500.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/Content/Site.css
+Response sent: http://localhost:59387/Content/Site.css with HTTP status 200.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/Ping.aspx
+Response sent: http://localhost:59387/Ping.aspx with HTTP status 200.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/Default.aspx
+Response sent: http://localhost:59387/Default.aspx with HTTP status 200.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/Default.aspx
+Response sent: http://localhost:59387/Default.aspx with HTTP status 200.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/Content/Site.css
+Response sent: http://localhost:59387/Content/Site.css with HTTP status 200.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/Default.aspx
+Response sent: http://localhost:59387/Default.aspx with HTTP status 200.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/Default.aspx
+Response sent: http://localhost:59387/Default.aspx with HTTP status 200.0
+IncrementMessages called
+Request started: "POST" http://localhost:59387/Default.aspx
+Response sent: http://localhost:59387/Default.aspx with HTTP status 302.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/NewCompany.aspx
+Response sent: http://localhost:59387/NewCompany.aspx with HTTP status 500.0
+IncrementMessages called
+Request started: "POST" http://localhost:59387/Default.aspx
+Response sent: http://localhost:59387/Default.aspx with HTTP status 302.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/NewCompany.aspx
+Response sent: http://localhost:59387/NewCompany.aspx with HTTP status 500.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/Default.aspx
+Response sent: http://localhost:59387/Default.aspx with HTTP status 200.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/
+Response sent: http://localhost:59387/default.aspx with HTTP status 200.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/Content/Site.css
+Response sent: http://localhost:59387/Content/Site.css with HTTP status 200.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/Default.aspx
+Response sent: http://localhost:59387/Default.aspx with HTTP status 200.0
+IncrementMessages called
+Request started: "POST" http://localhost:59387/Default.aspx
+Response sent: http://localhost:59387/Default.aspx with HTTP status 302.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/NewCompany.aspx
+Response sent: http://localhost:59387/NewCompany.aspx with HTTP status 500.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/NewCompany.aspx
+Response sent: http://localhost:59387/NewCompany.aspx with HTTP status 200.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/Default.aspx
+Response sent: http://localhost:59387/Default.aspx with HTTP status 200.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/Content/Site.css
+Response sent: http://localhost:59387/Content/Site.css with HTTP status 200.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/favicon.ico
+Response sent: http://localhost:59387/favicon.ico with HTTP status 404.0
+IncrementMessages called
+Request started: "POST" http://localhost:59387/Default.aspx
+Response sent: http://localhost:59387/Default.aspx with HTTP status 302.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/NewCompany.aspx
+Response sent: http://localhost:59387/NewCompany.aspx with HTTP status 200.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/WebResource.axd?d=pynGkmcFUV13He1Qd6_TZBmIWtaSkkaLmQVif71TOFdKfZ6R0H8dCUHyNBLRKOyQkedPgnTn1y7tf2hrQWUDrA2&t=638914220334897068
+IncrementMessages called
+Request started: "GET" http://localhost:59387/WebResource.axd?d=x2nkrMJGXkMELz33nwnakNcww39gJ3EaaFtcmLGYRwZYeMwE6CZEFrPpeRx92cza9SLWgY9uWm3k7NkKoxTSDsiAbaiLicjUqxiyVtnJ-3E1&t=638914220334897068
+Response sent: http://localhost:59387/WebResource.axd?d=x2nkrMJGXkMELz33nwnakNcww39gJ3EaaFtcmLGYRwZYeMwE6CZEFrPpeRx92cza9SLWgY9uWm3k7NkKoxTSDsiAbaiLicjUqxiyVtnJ-3E1&t=638914220334897068 with HTTP status 200.0
+Response sent: http://localhost:59387/WebResource.axd?d=pynGkmcFUV13He1Qd6_TZBmIWtaSkkaLmQVif71TOFdKfZ6R0H8dCUHyNBLRKOyQkedPgnTn1y7tf2hrQWUDrA2&t=638914220334897068 with HTTP status 200.0
+IncrementMessages called
+Request started: "POST" http://localhost:59387/NewCompany.aspx
+Response sent: http://localhost:59387/NewCompany.aspx with HTTP status 302.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/Default.aspx
+Response sent: http://localhost:59387/Default.aspx with HTTP status 200.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/Default.aspx
+Response sent: http://localhost:59387/Default.aspx with HTTP status 200.0
+IncrementMessages called
+Request started: "POST" http://localhost:59387/Default.aspx
+Response sent: http://localhost:59387/Default.aspx with HTTP status 302.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/NewCompany.aspx
+Response sent: http://localhost:59387/NewCompany.aspx with HTTP status 200.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/.well-known/appspecific/com.chrome.devtools.json
+Response sent: http://localhost:59387/.well-known/appspecific/com.chrome.devtools.json with HTTP status 404.0
+IncrementMessages called
+Request started: "POST" http://localhost:59387/NewCompany.aspx
+Response sent: http://localhost:59387/NewCompany.aspx with HTTP status 302.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/Default.aspx
+Response sent: http://localhost:59387/Default.aspx with HTTP status 200.0
+IncrementMessages called
+Request started: "POST" http://localhost:59387/Default.aspx
+Response sent: http://localhost:59387/Default.aspx with HTTP status 302.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/NewCompany.aspx?id=Lionel%27s+meat+and+sweets
+Response sent: http://localhost:59387/NewCompany.aspx?id=Lionel%27s+meat+and+sweets with HTTP status 200.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/Default.aspx
+Response sent: http://localhost:59387/Default.aspx with HTTP status 200.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/Default.aspx
+Response sent: http://localhost:59387/Default.aspx with HTTP status 200.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/
+Response sent: http://localhost:59387/default.aspx with HTTP status 200.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/Content/Site.css
+Response sent: http://localhost:59387/Content/Site.css with HTTP status 200.0
+IncrementMessages called
+IncrementMessages called
+Request started: "GET" http://localhost:59387/NewCompany.aspx
+Request started: "GET" http://localhost:59387/Default.aspx
+Response sent: http://localhost:59387/NewCompany.aspx with HTTP status 200.0
+Response sent: http://localhost:59387/Default.aspx with HTTP status 200.0
+IncrementMessages called
+Request started: "POST" http://localhost:59387/Default.aspx
+Response sent: http://localhost:59387/Default.aspx with HTTP status 302.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/NewCompany.aspx
+Response sent: http://localhost:59387/NewCompany.aspx with HTTP status 200.0
+IncrementMessages called
+IncrementMessages called
+Request started: "GET" http://localhost:59387/WebResource.axd?d=pynGkmcFUV13He1Qd6_TZBmIWtaSkkaLmQVif71TOFdKfZ6R0H8dCUHyNBLRKOyQkedPgnTn1y7tf2hrQWUDrA2&t=638914220334897068
+Request started: "GET" http://localhost:59387/WebResource.axd?d=x2nkrMJGXkMELz33nwnakNcww39gJ3EaaFtcmLGYRwZYeMwE6CZEFrPpeRx92cza9SLWgY9uWm3k7NkKoxTSDsiAbaiLicjUqxiyVtnJ-3E1&t=638914220334897068
+Response sent: http://localhost:59387/WebResource.axd?d=pynGkmcFUV13He1Qd6_TZBmIWtaSkkaLmQVif71TOFdKfZ6R0H8dCUHyNBLRKOyQkedPgnTn1y7tf2hrQWUDrA2&t=638914220334897068 with HTTP status 200.0
+Response sent: http://localhost:59387/WebResource.axd?d=x2nkrMJGXkMELz33nwnakNcww39gJ3EaaFtcmLGYRwZYeMwE6CZEFrPpeRx92cza9SLWgY9uWm3k7NkKoxTSDsiAbaiLicjUqxiyVtnJ-3E1&t=638914220334897068 with HTTP status 200.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/Default.aspx
+Response sent: http://localhost:59387/Default.aspx with HTTP status 200.0
+IncrementMessages called
+Request started: "POST" http://localhost:59387/Default.aspx
+Response sent: http://localhost:59387/Default.aspx with HTTP status 302.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/NewCompany.aspx?id=Lionel%27s+meat+and+sweets
+Response sent: http://localhost:59387/NewCompany.aspx?id=Lionel%27s+meat+and+sweets with HTTP status 200.0
+IncrementMessages called
+Request started: "POST" http://localhost:59387/NewCompany.aspx?id=Lionel%27s+meat+and+sweets
+Response sent: http://localhost:59387/NewCompany.aspx?id=Lionel%27s+meat+and+sweets with HTTP status 302.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/Default.aspx
+Response sent: http://localhost:59387/Default.aspx with HTTP status 200.0
+IncrementMessages called
+Request started: "POST" http://localhost:59387/NewCompany.aspx?id=Lionel%27s+meat+and+sweets
+Response sent: http://localhost:59387/NewCompany.aspx?id=Lionel%27s+meat+and+sweets with HTTP status 302.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/Default.aspx
+Response sent: http://localhost:59387/Default.aspx with HTTP status 200.0
+IncrementMessages called
+Request started: "POST" http://localhost:59387/Default.aspx
+Response sent: http://localhost:59387/Default.aspx with HTTP status 302.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/NewCompany.aspx?id=Lionel%27s+meat+and+sweets
+Response sent: http://localhost:59387/NewCompany.aspx?id=Lionel%27s+meat+and+sweets with HTTP status 200.0
+IncrementMessages called
+Request started: "POST" http://localhost:59387/NewCompany.aspx?id=Lionel%27s+meat+and+sweets
+Response sent: http://localhost:59387/NewCompany.aspx?id=Lionel%27s+meat+and+sweets with HTTP status 302.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/Default.aspx
+Response sent: http://localhost:59387/Default.aspx with HTTP status 200.0
+IncrementMessages called
+Request started: "POST" http://localhost:59387/Default.aspx
+Response sent: http://localhost:59387/Default.aspx with HTTP status 302.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/NewCompany.aspx?id=Lionel%27s+meat+and+sweets
+Response sent: http://localhost:59387/NewCompany.aspx?id=Lionel%27s+meat+and+sweets with HTTP status 200.0
+IncrementMessages called
+Request started: "POST" http://localhost:59387/NewCompany.aspx?id=Lionel%27s+meat+and+sweets
+Response sent: http://localhost:59387/NewCompany.aspx?id=Lionel%27s+meat+and+sweets with HTTP status 302.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/Default.aspx
+Response sent: http://localhost:59387/Default.aspx with HTTP status 200.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/Default.aspx
+Response sent: http://localhost:59387/Default.aspx with HTTP status 200.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/Default.aspx
+Response sent: http://localhost:59387/Default.aspx with HTTP status 200.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/Default.aspx
+Response sent: http://localhost:59387/Default.aspx with HTTP status 200.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/Default.aspx
+Response sent: http://localhost:59387/Default.aspx with HTTP status 200.0
+IncrementMessages called
+Request started: "POST" http://localhost:59387/Default.aspx
+Response sent: http://localhost:59387/Default.aspx with HTTP status 302.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/NewCompany.aspx?id=Lionel%27s+meat+and+sweets
+Response sent: http://localhost:59387/NewCompany.aspx?id=Lionel%27s+meat+and+sweets with HTTP status 200.0
+IncrementMessages called
+Request started: "POST" http://localhost:59387/NewCompany.aspx?id=Lionel%27s+meat+and+sweets
+Response sent: http://localhost:59387/NewCompany.aspx?id=Lionel%27s+meat+and+sweets with HTTP status 302.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/Default.aspx
+Response sent: http://localhost:59387/Default.aspx with HTTP status 200.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/Default.aspx
+Response sent: http://localhost:59387/Default.aspx with HTTP status 200.0
+IncrementMessages called
+Request started: "POST" http://localhost:59387/Default.aspx
+Response sent: http://localhost:59387/Default.aspx with HTTP status 302.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/NewCompany.aspx?id=Lionel%27s+meat+and+sweets
+Response sent: http://localhost:59387/NewCompany.aspx?id=Lionel%27s+meat+and+sweets with HTTP status 200.0
+IncrementMessages called
+Request started: "POST" http://localhost:59387/NewCompany.aspx?id=Lionel%27s+meat+and+sweets
+Response sent: http://localhost:59387/NewCompany.aspx?id=Lionel%27s+meat+and+sweets with HTTP status 302.0
+IncrementMessages called
+Request started: "GET" http://localhost:59387/Default.aspx
+Response sent: http://localhost:59387/Default.aspx with HTTP status 200.0
