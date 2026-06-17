@@ -22,7 +22,8 @@ ASP.NET Web Forms project targeting .NET Framework 4.6.1 with SQL Server LocalDB
 3. Install SQL Server Express LocalDB and SQL Server Management Studio.
 4. In SSMS, connect to `(LocalDB)\MSSQLLocalDB`.
 5. Run `Sql\Database.sql`.
-6. Build and run the solution with IIS Express.
+6. Optionally run `Sql\SampleData.sql` to add example companies.
+7. Build and run the solution with IIS Express.
 
 The default connection string is in `Web.config`:
 
