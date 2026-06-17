@@ -84,6 +84,7 @@
     <Content Include="NewCompany.aspx" />
     <Content Include="Site.Master" />
     <Content Include="Sql\Database.sql" />
+    <Content Include="Sql\SampleData.sql" />
     <Content Include="Web.config" />
   </ItemGroup>
   <PropertyGroup>
