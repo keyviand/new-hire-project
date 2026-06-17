@@ -1,0 +1,35 @@
+body {
+    background: #f7f8fa;
+    color: #222;
+}
+
+.page-header {
+    margin-top: 10px;
+}
+
+.form-panel {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    padding: 20px;
+    margin-bottom: 30px;
+}
+
+.required {
+    color: #a94442;
+}
+
+.validation-summary-errors,
+.field-validation-error {
+    color: #a94442;
+}
+
+.module-list label {
+    display: block;
+    font-weight: 400;
+    margin-bottom: 8px;
+}
+
+.grid-actions a {
+    margin-right: 10px;
+}
