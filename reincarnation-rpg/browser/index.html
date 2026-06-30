@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <title>Everdawn Online: Ascension</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <canvas id="game" aria-label="Everdawn Online game"></canvas>
+  <div id="hud">
+    <div class="brand"><span class="sigil">E</span><div><strong>EVERDAWN ONLINE</strong><small>ASCENSION | FLOOR SYSTEM</small></div></div>
+    <div class="party" id="party">Party 0/4</div>
+  </div>
+  <div id="vitals">
+    <div class="vital hp"><i id="hp-fill"></i><span id="hp-text">HP 100 / 100</span></div>
+    <div class="vital mana"><i id="mana-fill"></i><span id="mana-text">Mana 40 / 40</span></div>
+    <div id="stats">Level 1 | XP 0/100 | Gold 0 | Kills 0</div>
+  </div>
+  <div id="objective">
+    <strong id="quest-status">Quest: Defeat monsters 0 / 5</strong>
+    <span id="evolution-status">Reborn Wanderer · Essence 0</span>
+    <span id="unique-status">Unique Encounter: Locked (complete 2 quests)</span>
+  </div>
+  <div id="story"><small id="story-chapter">CHAPTER 1</small><strong id="story-objective">Speak with Mira in Everdawn Village.</strong></div>
+  <div id="boss"><span id="boss-name">FLOOR 1 | ASTERION, SKYGLASS SENTINEL</span><div><i id="boss-fill"></i></div></div>
+  <div id="help">WASD move | SPACE strike | E/Q skills | F interact | I Inventory | C Character | P Echo</div>
+  <button id="inventory-button" type="button">INVENTORY <kbd>I</kbd></button>
+  <button id="character-button" type="button">CHARACTER <kbd>C</kbd></button>
+  <div id="join" class="overlay">
+    <form id="join-form" class="card">
+      <div class="crest">E</div>
+      <p class="eyebrow">WELCOME TO</p>
+      <h1>Everdawn Online</h1>
+      <p>Enter Skyglass Fields with your party and defeat the Floor Guardians.</p>
+      <label>Character name<input id="name" maxlength="18" value="Ari" autocomplete="nickname"></label>
+      <label>Combat style<select id="style"><option>Vanguard</option><option>Spellblade</option><option>Strider</option></select></label>
+      <button type="submit">ENTER FLOOR 1</button>
+      <small id="connection">The host must keep the browser server running.</small>
+    </form>
+  </div>
+  <div id="echo-panel" class="progress-panel hidden">
+    <h2>Echo Learning Progress</h2>
+    <p id="echo-readiness">Echo is learning the current game systems.</p>
+    <div class="progress-row"><span>World exploration</span><div><i id="echo-exploration"></i></div><b id="echo-exploration-text">0%</b></div>
+    <div class="progress-row"><span>Monster knowledge</span><div><i id="echo-monsters"></i></div><b id="echo-monsters-text">0%</b></div>
+    <div class="progress-row"><span>Combat skill</span><div><i id="echo-combat"></i></div><b id="echo-combat-text">0%</b></div>
+    <div class="progress-row"><span>Boss training</span><div><i id="echo-boss"></i></div><b id="echo-boss-text">0%</b></div>
+    <div class="progress-row"><span>Party support</span><div><i id="echo-support"></i></div><b id="echo-support-text">0%</b></div>
+    <div class="overall">Overall mastery <strong id="echo-overall">0%</strong></div>
+    <small>At 85%, Echo is ready for more enemies, floors, skills, or quests. Press P to close.</small>
+  </div>
+  <div id="character-panel" class="progress-panel character-panel hidden">
+    <div class="panel-heading">
+      <div><small>PLAYER PROFILE</small><h2 id="character-name">Adventurer</h2></div>
+      <button id="character-close" type="button" aria-label="Close character menu">×</button>
+    </div>
+    <p id="character-rank">Reborn Wanderer</p>
+    <div class="character-grid">
+      <div><span>Level</span><strong id="stat-level">1</strong></div>
+      <div><span>Experience</span><strong id="stat-xp">0 / 100</strong></div>
+      <div><span>Health</span><strong id="stat-hp">100 / 100</strong></div>
+      <div><span>Mana</span><strong id="stat-mana">40 / 40</strong></div>
+      <div><span>Monsters defeated</span><strong id="stat-kills">0</strong></div>
+      <div><span>Gold</span><strong id="stat-gold">0</strong></div>
+      <div><span>Floors cleared</span><strong id="stat-floors">0</strong></div>
+      <div><span>Hunt quests</span><strong id="stat-quests">0</strong></div>
+    </div>
+    <div class="character-section"><span>Absorbed Essence</span><strong id="stat-essence">None yet</strong></div>
+    <div class="character-section"><span>Abilities</span><strong id="stat-abilities">Sword Strike · Ascension Burst · Devourer Pulse (locked)</strong></div>
+    <div class="character-section"><span>Unique Encounter</span><strong id="stat-unique">Locked</strong></div>
+    <small>Press C or Escape to close.</small>
+  </div>
+  <div id="inventory-panel" class="progress-panel inventory-panel hidden">
+    <div class="panel-heading"><div><small>RELIC LOADOUT</small><h2>Inventory</h2></div><button id="inventory-close" type="button">×</button></div>
+    <p id="gear-summary">Attack +0 · Defense 0</p>
+    <div class="equipment-slots">
+      <div><span>Weapon</span><strong id="slot-weapon">Empty</strong></div>
+      <div><span>Armor</span><strong id="slot-armor">Empty</strong></div>
+      <div><span>Charm</span><strong id="slot-charm">Empty</strong></div>
+    </div>
+    <div id="inventory-list" class="inventory-list"><p>Defeat monsters or visit Bram to find equipment.</p></div>
+    <small>Click EQUIP beside an item. Progress saves automatically under your character name.</small>
+  </div>
+  <div id="message"></div>
+  <script src="game.js"></script>
+</body>
+</html>

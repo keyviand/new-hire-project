@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Nova — Local AI</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <main class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <div class="logo" aria-hidden="true">N</div>
+        <div>
+          <h1>Nova</h1>
+          <p id="status"><span class="status-dot"></span> Connecting locally…</p>
+        </div>
+      </div>
+      <button id="clear-button" class="secondary-button" type="button">New chat</button>
+    </header>
+
+    <section id="conversation" class="conversation" aria-live="polite">
+      <div id="welcome" class="welcome">
+        <div class="welcome-orb" aria-hidden="true">N</div>
+        <h2>Meet Nova</h2>
+        <p>Your own AI model, running privately on this computer.</p>
+        <div class="suggestions">
+          <button type="button">What are you?</button>
+          <button type="button">Explain artificial intelligence</button>
+          <button type="button">Give me a productivity tip</button>
+        </div>
+      </div>
+    </section>
+
+    <form id="chat-form" class="composer">
+      <textarea
+        id="message-input"
+        rows="1"
+        maxlength="2000"
+        placeholder="Message Nova…"
+        aria-label="Message Nova"
+      ></textarea>
+      <button id="send-button" type="submit" aria-label="Send message">
+        <span>↑</span>
+      </button>
+    </form>
+    <p class="privacy-note">Nova runs locally. No API is used and your messages stay on this computer.</p>
+  </main>
+  <script src="/app.js"></script>
+</body>
+</html>
+
