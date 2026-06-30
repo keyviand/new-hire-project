@@ -1,0 +1,16 @@
+.venv/
+__pycache__/
+*.pyc
+savegame.json
+ai_brain.json
+ai_brain_v3.json
+ai_brain_chapter2.json
+ai_brain_vrmmo.json
+ai_brain_v1_backup.json
+preview.png
+*_preview.png
+tools/cloudflared.exe
+tunnel*.log
+PUBLIC_LINK.txt
+browser_saves.json
+browser_saves.tmp
