@@ -46,6 +46,7 @@ async def browser_clients() -> None:
         assert snapshot["guardian"]["hp"] == 850
         assert len(snapshot["monsters"]) >= 10
         assert snapshot["echo"]["hp"] > 0
+        assert snapshot["echo"]["state"] in {"patrolling", "hunting", "fighting"}
         assert set(snapshot["echo_progress"]) >= {
             "overall", "exploration", "monsters", "combat", "boss", "support"
         }

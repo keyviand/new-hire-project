@@ -148,11 +148,15 @@ class BrowserWorldState(coop_server.CoopState):
             "hp": 90,
             "max_hp": 90,
             "target": None,
+            "target_name": None,
+            "state": "patrolling",
+            "attack_pulse": 0,
             "kills": 0,
             "damage": 0,
             "boss_damage": 0,
             "support_seconds": 0.0,
         }
+        self.echo_patrol_angle = 0.0
         self.echo_tiles: set[str] = set()
         self.floor_number = 1
         self.guardian: dict = {}
@@ -580,16 +584,36 @@ class BrowserWorldState(coop_server.CoopState):
             if active:
                 target = min(active, key=lambda item: math.dist((self.echo["x"], self.echo["y"]), (item["x"], item["y"])))
                 self.echo["target"] = target["id"]
+                self.echo["target_name"] = target["kind"]
                 distance = math.dist((self.echo["x"], self.echo["y"]), (target["x"], target["y"]))
                 if distance > 38:
+                    self.echo["state"] = "hunting"
                     self.echo["x"] += (target["x"] - self.echo["x"]) / distance * 130 * dt
                     self.echo["y"] += (target["y"] - self.echo["y"]) / distance * 130 * dt
                 else:
-                    dealt = min(target["hp"], 14 * dt)
+                    self.echo["state"] = "fighting"
+                    if distance > 0:
+                        dx = (target["x"] - self.echo["x"]) / distance
+                        dy = (target["y"] - self.echo["y"]) / distance
+                        self.echo["x"] += (-dy * 46 + dx * (distance - 32) * 2) * dt
+                        self.echo["y"] += (dx * 46 + dy * (distance - 32) * 2) * dt
+                    dealt = min(target["hp"], 22 * dt)
                     target["hp"] = max(0, target["hp"] - dealt)
                     self.echo["damage"] += dealt
+                    self.echo["attack_pulse"] += 1
                     if target["hp"] == 0:
                         self._defeat_monster(target, None)
+            else:
+                self.echo["target"] = None
+                self.echo["target_name"] = None
+                self.echo["state"] = "patrolling"
+                self.echo_patrol_angle += dt * 0.7
+                patrol_x = 470 + math.cos(self.echo_patrol_angle) * 90
+                patrol_y = 445 + math.sin(self.echo_patrol_angle) * 70
+                distance = math.dist((self.echo["x"], self.echo["y"]), (patrol_x, patrol_y))
+                if distance > 2:
+                    self.echo["x"] += (patrol_x - self.echo["x"]) / distance * min(80 * dt, distance)
+                    self.echo["y"] += (patrol_y - self.echo["y"]) / distance * min(80 * dt, distance)
 
             echo_tile = f"{int(self.echo['x'] // 96)},{int(self.echo['y'] // 96)}"
             self.echo_tiles.add(echo_tile)
