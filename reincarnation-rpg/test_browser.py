@@ -46,7 +46,12 @@ async def browser_clients() -> None:
         assert snapshot["guardian"]["hp"] == 850
         assert len(snapshot["monsters"]) >= 10
         assert snapshot["echo"]["hp"] > 0
-        assert snapshot["echo"]["state"] in {"patrolling", "hunting", "fighting"}
+        assert snapshot["echo"]["current_action"] in {
+            "approach", "strike", "circle", "power", "retreat", "explore", "support", "patrol"
+        }
+        assert set(snapshot["echo_learning"]) >= {
+            "algorithm", "state", "action", "last_reward", "epsilon", "q_values", "decisions"
+        }
         assert set(snapshot["echo_progress"]) >= {
             "overall", "exploration", "monsters", "combat", "boss", "support"
         }
@@ -176,6 +181,7 @@ def main() -> None:
                 if "Everdawn Online" in html:
                     assert "Devourer Pulse" in html
                     assert 'id="character-panel"' in html
+                    assert 'id="echo-ml-state"' in html
                     break
             except OSError:
                 time.sleep(0.05)

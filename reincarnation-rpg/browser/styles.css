@@ -58,6 +58,16 @@ html,body { margin:0; width:100%; height:100%; overflow:hidden; background:#0612
 .progress-panel .overall { margin-top:24px; padding-top:18px; display:flex; justify-content:space-between; border-top:1px solid #ffffff18; font-size:19px; }
 .progress-panel .overall strong { color:#7cecff; font-size:26px; }
 .progress-panel small { display:block; margin-top:16px; color:#8295a3; }
+#echo-panel { max-height:92vh; overflow:auto; }
+.learning-debugger { margin-top:22px; padding-top:18px; border-top:1px solid #ffffff18; }
+.learning-debugger h3 { margin:0 0 13px; color:#d9c4ff; font-size:15px; letter-spacing:.05em; }
+.learning-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+.learning-grid>div { min-width:0; padding:10px; background:#ffffff08; border-radius:8px; }
+.learning-grid span,.q-values>span { display:block; margin-bottom:5px; color:#8295a3; font-size:9px; letter-spacing:.08em; text-transform:uppercase; }
+.learning-grid strong { display:block; overflow-wrap:anywhere; color:#eff8ff; font-size:11px; }
+.q-values { margin-top:10px; padding:11px; background:#0b1b29; border-left:3px solid #8b5cf6; border-radius:6px; }
+#echo-q-values { display:flex; flex-wrap:wrap; gap:7px; color:#d9e8f2; font-size:11px; }
+#echo-q-values b { padding:4px 7px; background:#17293a; border-radius:5px; }
 .panel-heading { display:flex; align-items:flex-start; justify-content:space-between; }
 .panel-heading small { margin:0 0 5px; color:#ae8bdb; letter-spacing:.18em; }
 .panel-heading button { width:36px; height:36px; color:#d9c5f3; background:#ffffff0b; border:1px solid #ffffff22; border-radius:8px; font-size:24px; cursor:pointer; }
@@ -76,4 +86,4 @@ html,body { margin:0; width:100%; height:100%; overflow:hidden; background:#0612
 .inventory-item { display:grid; grid-template-columns:1fr auto; align-items:center; gap:12px; padding:11px 13px; background:#0d1c29; border:1px solid #ffffff12; border-radius:8px; }
 .inventory-item span { display:block; color:#8ea5b3; margin-top:3px; font-size:10px; }
 .inventory-item button { padding:7px 10px; color:#07131e; background:#7ee9ef; border:0; border-radius:6px; font-weight:800; cursor:pointer; }
-@media(max-width:700px){ #boss{top:74px;width:80vw}.brand strong{font-size:11px}#help{display:none}.card{padding:24px}#objective{right:10px;top:130px;min-width:240px}#story{left:10px;top:auto;bottom:62px;width:240px}#character-button{right:10px}#inventory-button{right:140px}.character-grid{grid-template-columns:repeat(2,1fr)}.progress-panel{padding:22px}.equipment-slots{grid-template-columns:1fr} }
+@media(max-width:700px){ #boss{top:74px;width:80vw}.brand strong{font-size:11px}#help{display:none}.card{padding:24px}#objective{right:10px;top:130px;min-width:240px}#story{left:10px;top:auto;bottom:62px;width:240px}#character-button{right:10px}#inventory-button{right:140px}.character-grid{grid-template-columns:repeat(2,1fr)}.progress-panel{padding:22px}.equipment-slots{grid-template-columns:1fr}.learning-grid{grid-template-columns:repeat(2,1fr)} }

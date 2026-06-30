@@ -34,6 +34,7 @@ let monsters = [];
 let loot = [];
 let echo = {x:470,y:445,hp:90,max_hp:90};
 let echoProgress = {overall:0,exploration:0,monsters:0,combat:0,boss:0,support:0,ready_for_content:false};
+let echoLearning = {state:'waiting',action:'patrol',last_reward:0,total_reward:0,epsilon:.28,states_learned:0,decisions:0,updates:0,last_q_change:0,q_values:{}};
 let uniqueEncounter = {name:'Grimveil Devourer',unlocked:false,defeated:false};
 let npcs = [], chests = [];
 let lastNoticeId = 0;
@@ -106,6 +107,7 @@ function applySnapshot(data){
     if(Math.hypot(player.x-me.x,player.y-me.y)>180){player.x=me.x;player.y=me.y;}
   }
   monsters=data.monsters||[]; loot=data.loot||[]; if(data.echo) echo=data.echo;if(data.echo_progress) echoProgress=data.echo_progress;
+  if(data.echo_learning)echoLearning=data.echo_learning;
   npcs=data.npcs||[];chests=data.chests||[];
   if(data.unique_encounter){
     const justAwakened=!uniqueEncounter.unlocked&&data.unique_encounter.unlocked;
@@ -194,6 +196,17 @@ function updateEchoPanel(){
   }
   document.querySelector('#echo-overall').textContent=`${Math.round((echoProgress.overall||0)*100)}%`;
   echoReadiness.textContent=echoProgress.ready_for_content?'Echo has mastered this content. It is time to add more!':'Echo is still learning the current floors and combat systems.';
+  document.querySelector('#echo-ml-state').textContent=echoLearning.state||'waiting';
+  document.querySelector('#echo-ml-action').textContent=echoLearning.action||'patrol';
+  document.querySelector('#echo-ml-reward').textContent=Number(echoLearning.last_reward||0).toFixed(3);
+  document.querySelector('#echo-ml-total').textContent=Number(echoLearning.total_reward||0).toFixed(2);
+  document.querySelector('#echo-ml-epsilon').textContent=Number(echoLearning.epsilon||0).toFixed(3);
+  document.querySelector('#echo-ml-states').textContent=echoLearning.states_learned||0;
+  document.querySelector('#echo-ml-decisions').textContent=`${echoLearning.decisions||0} / ${echoLearning.updates||0}`;
+  document.querySelector('#echo-ml-change').textContent=Number(echoLearning.last_q_change||0).toFixed(4);
+  const values=document.querySelector('#echo-q-values');values.replaceChildren();
+  const entries=Object.entries(echoLearning.q_values||{}).sort((a,b)=>b[1]-a[1]);
+  if(!entries.length){values.textContent='No values learned yet.';}else for(const [action,value] of entries){const item=document.createElement('b');item.textContent=`${action}: ${Number(value).toFixed(3)}`;values.append(item);}
 }
 
 function updateCharacterPanel(){
@@ -287,6 +300,6 @@ function drawMonster(x,y,m){const color=`rgb(${m.color})`,size=m.unique?28:15+(m
 function drawLoot(x,y,kind){const color=kind==='potion'?'#ff6f9c':kind==='gear'?'#8be9ff':'#ffd35b';ctx.save();ctx.shadowColor=color;ctx.shadowBlur=18;ctx.fillStyle=color;ctx.fillRect(x-7,y-7,14,14);ctx.restore();}
 function drawNpc(x,y,npc){const near=Math.hypot(player.x-npc.x,player.y-npc.y)<95;ctx.save();ctx.fillStyle=`rgb(${npc.color})`;ctx.shadowColor=ctx.fillStyle;ctx.shadowBlur=12;ctx.beginPath();ctx.arc(x,y-8,9,0,Math.PI*2);ctx.fill();ctx.fillRect(x-9,y,18,24);ctx.restore();ctx.fillStyle='#fff';ctx.font='bold 11px Segoe UI';ctx.textAlign='center';ctx.fillText(`${npc.name} · ${npc.role}`,x,y-28);if(near){ctx.fillStyle='#ffe58f';ctx.fillText('F · INTERACT',x,y+43);}}
 function drawChest(x,y){const near=Math.hypot(player.x-(x+(player.x-innerWidth/2)),player.y-(y+(player.y-innerHeight/2)))<95;ctx.save();ctx.fillStyle='#c89343';ctx.strokeStyle='#ffe393';ctx.lineWidth=2;ctx.shadowColor='#ffd35b';ctx.shadowBlur=18;ctx.fillRect(x-17,y-11,34,22);ctx.strokeRect(x-17,y-11,34,22);ctx.restore();if(near){ctx.fillStyle='#ffe58f';ctx.font='11px Segoe UI';ctx.textAlign='center';ctx.fillText('F · OPEN VAULT',x,y-25);}}
-function drawEcho(x,y){ctx.save();ctx.shadowColor='#c27dff';ctx.shadowBlur=echo.state==='fighting'?28:18;ctx.fillStyle='#bd7cff';ctx.beginPath();ctx.arc(x,y,14,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#f6eaff';ctx.lineWidth=2;ctx.stroke();if(echo.state==='fighting'){const pulse=18+(echo.attack_pulse%8);ctx.strokeStyle='#ffb4fa99';ctx.beginPath();ctx.arc(x,y,pulse,0,Math.PI*2);ctx.stroke();}ctx.restore();ctx.fillStyle='#ead7ff';ctx.font='11px Segoe UI';ctx.textAlign='center';ctx.fillText(echo.state==='fighting'?`Echo [AI] · Fighting ${echo.target_name}`:echo.state==='hunting'?`Echo [AI] · Hunting ${echo.target_name}`:'Echo [AI] · Patrolling',x,y-25);}
+function drawEcho(x,y){const action=echo.current_action||'patrol',combat=['strike','circle','power'].includes(action);ctx.save();ctx.shadowColor='#c27dff';ctx.shadowBlur=combat?28:18;ctx.fillStyle='#bd7cff';ctx.beginPath();ctx.arc(x,y,14,0,Math.PI*2);ctx.fill();ctx.strokeStyle='#f6eaff';ctx.lineWidth=2;ctx.stroke();if(combat){const pulse=18+(echo.attack_pulse%8);ctx.strokeStyle='#ffb4fa99';ctx.beginPath();ctx.arc(x,y,pulse,0,Math.PI*2);ctx.stroke();}ctx.restore();ctx.fillStyle='#ead7ff';ctx.font='11px Segoe UI';ctx.textAlign='center';const target=echo.target_name?` · ${echo.target_name}`:'';ctx.fillText(`Echo [AI] · ${action.toUpperCase()}${target}`,x,y-25);ctx.fillStyle='#101522';ctx.fillRect(x-24,y+23,48,4);ctx.fillStyle='#f2b84b';ctx.fillRect(x-24,y+23,48*Math.max(0,echo.energy||0)/(echo.max_energy||60),4);}
 function flash(text){message.textContent=text;message.classList.add('show');clearTimeout(flash.timer);flash.timer=setTimeout(()=>message.classList.remove('show'),1800);}
 function loop(now){const dt=Math.min(.05,(now-lastFrame)/1000);lastFrame=now;update(dt,now);draw();requestAnimationFrame(loop);} requestAnimationFrame(loop);

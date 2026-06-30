@@ -14,3 +14,5 @@ tunnel*.log
 PUBLIC_LINK.txt
 browser_saves.json
 browser_saves.tmp
+echo_brain_q.json
+echo_brain_q.tmp

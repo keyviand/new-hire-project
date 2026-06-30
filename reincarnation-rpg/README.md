@@ -1,5 +1,7 @@
 # Everdawn Online: Ascension
 
+Echo now uses persistent tabular Q-learning. See [ECHO_MACHINE_LEARNING.md](ECHO_MACHINE_LEARNING.md) for the state design, actions, rewards, equation, and debugging workflow.
+
 A local 2D open-world fantasy RPG prototype written in Python and Pygame.
 
 This is an original VRMMO-style world. It does not copy characters, locations,
