@@ -15,11 +15,13 @@ from pathlib import Path
 from aiohttp import WSMsgType, web
 
 import coop_server
+from echo_learning import EchoQLearner
 
 
 ROOT = Path(__file__).resolve().parent
 WEB_ROOT = ROOT / "browser"
 SAVE_PATH = ROOT / "browser_saves.json"
+ECHO_BRAIN_PATH = ROOT / "echo_brain_q.json"
 
 
 class BrowserWorldState(coop_server.CoopState):
@@ -151,12 +153,23 @@ class BrowserWorldState(coop_server.CoopState):
             "target_name": None,
             "state": "patrolling",
             "attack_pulse": 0,
+            "energy": 60.0,
+            "max_energy": 60,
+            "deaths": 0,
+            "current_action": "patrol",
             "kills": 0,
             "damage": 0,
             "boss_damage": 0,
             "support_seconds": 0.0,
         }
         self.echo_patrol_angle = 0.0
+        self.echo_learner = EchoQLearner(ECHO_BRAIN_PATH if save_path else None)
+        self.echo_decision_timer = 0.0
+        self.echo_previous_state: str | None = None
+        self.echo_previous_action: str | None = None
+        self.echo_pending_reward = 0.0
+        self.echo_decision_position = (self.echo["x"], self.echo["y"])
+        self.echo_explore_goal = (900.0, 600.0)
         self.echo_tiles: set[str] = set()
         self.floor_number = 1
         self.guardian: dict = {}
@@ -529,6 +542,129 @@ class BrowserWorldState(coop_server.CoopState):
         else:
             self.echo["kills"] += 1
 
+    def _echo_context(self, target: dict | None, players: list[dict]) -> tuple[str, list[str]]:
+        health_ratio = self.echo["hp"] / self.echo["max_hp"]
+        health = "critical" if health_ratio < 0.3 else "hurt" if health_ratio < 0.65 else "healthy"
+        energy = "low" if self.echo["energy"] < 20 else "ready"
+        ally_near = any(math.dist((self.echo["x"], self.echo["y"]), (player["x"], player["y"])) < 180 for player in players)
+        if not target:
+            state = f"hp={health}|energy={energy}|range=none|threat=none|ally={'yes' if ally_near else 'no'}"
+            return state, ["patrol", "support"] if players else ["patrol"]
+        distance = math.dist((self.echo["x"], self.echo["y"]), (target["x"], target["y"]))
+        enemy_range = "close" if distance <= 46 else "near" if distance <= 180 else "far"
+        threat = "unique" if target.get("unique") else "elite" if target.get("elite") else "normal"
+        state = f"hp={health}|energy={energy}|range={enemy_range}|threat={threat}|ally={'yes' if ally_near else 'no'}"
+        if enemy_range == "close":
+            actions = ["strike", "circle", "retreat"]
+            if self.echo["energy"] >= 20:
+                actions.append("power")
+        else:
+            actions = ["approach", "explore"]
+            if players:
+                actions.append("support")
+        return state, actions
+
+    def _move_echo_toward(self, x: float, y: float, speed: float, dt: float) -> float:
+        distance = math.dist((self.echo["x"], self.echo["y"]), (x, y))
+        if distance > 0:
+            step = min(distance, speed * dt)
+            self.echo["x"] += (x - self.echo["x"]) / distance * step
+            self.echo["y"] += (y - self.echo["y"]) / distance * step
+            self.echo["x"] = max(35, min(2845, self.echo["x"]))
+            self.echo["y"] = max(35, min(2077, self.echo["y"]))
+        return distance
+
+    def _tick_echo(self, active: list[dict], players: list[dict], dt: float) -> None:
+        target = min(active, key=lambda item: math.dist((self.echo["x"], self.echo["y"]), (item["x"], item["y"]))) if active else None
+        self.echo["target"] = target["id"] if target else None
+        self.echo["target_name"] = target["kind"] if target else None
+        state, valid_actions = self._echo_context(target, players)
+        self.echo_decision_timer -= dt
+        if self.echo_decision_timer <= 0:
+            if self.echo_previous_state and self.echo_previous_action:
+                moved = math.dist(self.echo_decision_position, (self.echo["x"], self.echo["y"]))
+                if self.echo_previous_action in {"approach", "explore", "support", "retreat"} and moved < 2:
+                    self.echo_pending_reward -= 0.45
+                self.echo_learner.learn(
+                    self.echo_previous_state,
+                    self.echo_previous_action,
+                    self.echo_pending_reward,
+                    state,
+                    valid_actions,
+                )
+            action = self.echo_learner.choose_action(state, valid_actions)
+            self.echo_previous_state = state
+            self.echo_previous_action = action
+            self.echo_pending_reward = 0.0
+            self.echo_decision_position = (self.echo["x"], self.echo["y"])
+            self.echo_decision_timer = 0.35
+        action = self.echo_previous_action or valid_actions[0]
+        self.echo["current_action"] = action
+        self.echo["state"] = action
+        self.echo["energy"] = min(self.echo["max_energy"], self.echo["energy"] + 7 * dt)
+
+        if action == "support" and players:
+            ally = min(players, key=lambda player: math.dist((self.echo["x"], self.echo["y"]), (player["x"], player["y"])))
+            distance = self._move_echo_toward(ally["x"], ally["y"], 115, dt)
+            if distance < 180:
+                self.echo_pending_reward += 0.7 * dt
+                self.echo["hp"] = min(self.echo["max_hp"], self.echo["hp"] + 4 * dt)
+        elif action in {"patrol", "explore"}:
+            if action == "patrol":
+                self.echo_patrol_angle += dt * 0.7
+                goal = (470 + math.cos(self.echo_patrol_angle) * 90, 445 + math.sin(self.echo_patrol_angle) * 70)
+            else:
+                if math.dist((self.echo["x"], self.echo["y"]), self.echo_explore_goal) < 60:
+                    self.echo_explore_goal = (self.echo_learner.random.uniform(300, 2650), self.echo_learner.random.uniform(260, 1900))
+                goal = self.echo_explore_goal
+            self._move_echo_toward(*goal, 95 if action == "patrol" else 125, dt)
+        elif target:
+            distance = math.dist((self.echo["x"], self.echo["y"]), (target["x"], target["y"]))
+            if action == "approach" or (action in {"strike", "circle", "power"} and distance > 48):
+                self._move_echo_toward(target["x"], target["y"], 135, dt)
+                if action != "approach":
+                    self.echo_pending_reward -= 0.08 * dt
+            elif action == "retreat":
+                if distance > 0:
+                    away_x = self.echo["x"] + (self.echo["x"] - target["x"]) / distance * 150
+                    away_y = self.echo["y"] + (self.echo["y"] - target["y"]) / distance * 150
+                    self._move_echo_toward(away_x, away_y, 155, dt)
+                self.echo["hp"] = min(self.echo["max_hp"], self.echo["hp"] + 2 * dt)
+            else:
+                dealt_rate = {"strike": 23, "circle": 17, "power": 34}[action]
+                if action == "power":
+                    self.echo["energy"] = max(0, self.echo["energy"] - 24 * dt)
+                if distance > 0:
+                    dx = (target["x"] - self.echo["x"]) / distance
+                    dy = (target["y"] - self.echo["y"]) / distance
+                    orbit_speed = 52 if action == "circle" else 18
+                    self.echo["x"] += (-dy * orbit_speed + dx * (distance - 32) * 2) * dt
+                    self.echo["y"] += (dx * orbit_speed + dy * (distance - 32) * 2) * dt
+                dealt = min(target["hp"], dealt_rate * dt)
+                target["hp"] -= dealt
+                self.echo["damage"] += dealt
+                self.echo["attack_pulse"] += 1
+                self.echo_pending_reward += dealt * 0.045
+                risk = {"strike": 0.32, "circle": 0.12, "power": 0.52}[action]
+                incoming = target["attack"] * risk * dt
+                self.echo["hp"] -= incoming
+                self.echo_pending_reward -= incoming * 0.07
+                if target["hp"] <= 0:
+                    self.echo_pending_reward += 15 if target.get("unique") else 10 if target.get("elite") else 7
+                    self._defeat_monster(target, None)
+
+        if self.echo["hp"] <= 0:
+            self.echo_pending_reward -= 20
+            self.echo_learner.learn(state, action, self.echo_pending_reward, state, [], terminal=True)
+            self.echo["x"], self.echo["y"] = 470.0, 445.0
+            self.echo["hp"] = self.echo["max_hp"]
+            self.echo["energy"] = self.echo["max_energy"]
+            self.echo["deaths"] += 1
+            self.echo_previous_state = None
+            self.echo_previous_action = None
+            self.echo_pending_reward = 0.0
+            self.echo_decision_timer = 0.0
+
     def tick(self, dt: float) -> None:
         with self.lock:
             now = time.monotonic()
@@ -581,47 +717,18 @@ class BrowserWorldState(coop_server.CoopState):
                         target["gold"] = max(0, target["gold"] - 10)
 
             active = [monster for monster in self.monsters if monster["active"]]
-            if active:
-                target = min(active, key=lambda item: math.dist((self.echo["x"], self.echo["y"]), (item["x"], item["y"])))
-                self.echo["target"] = target["id"]
-                self.echo["target_name"] = target["kind"]
-                distance = math.dist((self.echo["x"], self.echo["y"]), (target["x"], target["y"]))
-                if distance > 38:
-                    self.echo["state"] = "hunting"
-                    self.echo["x"] += (target["x"] - self.echo["x"]) / distance * 130 * dt
-                    self.echo["y"] += (target["y"] - self.echo["y"]) / distance * 130 * dt
-                else:
-                    self.echo["state"] = "fighting"
-                    if distance > 0:
-                        dx = (target["x"] - self.echo["x"]) / distance
-                        dy = (target["y"] - self.echo["y"]) / distance
-                        self.echo["x"] += (-dy * 46 + dx * (distance - 32) * 2) * dt
-                        self.echo["y"] += (dx * 46 + dy * (distance - 32) * 2) * dt
-                    dealt = min(target["hp"], 22 * dt)
-                    target["hp"] = max(0, target["hp"] - dealt)
-                    self.echo["damage"] += dealt
-                    self.echo["attack_pulse"] += 1
-                    if target["hp"] == 0:
-                        self._defeat_monster(target, None)
-            else:
-                self.echo["target"] = None
-                self.echo["target_name"] = None
-                self.echo["state"] = "patrolling"
-                self.echo_patrol_angle += dt * 0.7
-                patrol_x = 470 + math.cos(self.echo_patrol_angle) * 90
-                patrol_y = 445 + math.sin(self.echo_patrol_angle) * 70
-                distance = math.dist((self.echo["x"], self.echo["y"]), (patrol_x, patrol_y))
-                if distance > 2:
-                    self.echo["x"] += (patrol_x - self.echo["x"]) / distance * min(80 * dt, distance)
-                    self.echo["y"] += (patrol_y - self.echo["y"]) / distance * min(80 * dt, distance)
+            self._tick_echo(active, living_players, dt)
 
             echo_tile = f"{int(self.echo['x'] // 96)},{int(self.echo['y'] // 96)}"
+            if echo_tile not in self.echo_tiles:
+                self.echo_pending_reward += 0.4
             self.echo_tiles.add(echo_tile)
             if any(
                 math.dist((self.echo["x"], self.echo["y"]), (p["x"], p["y"])) < 180
                 for p in living_players
             ):
                 self.echo["support_seconds"] += dt
+                self.echo_pending_reward += 0.15 * dt
 
             if not self.floor_cleared:
                 boss_distance = math.dist(
@@ -632,6 +739,7 @@ class BrowserWorldState(coop_server.CoopState):
                     dealt = min(self.guardian["hp"], 10 * dt)
                     self.guardian["hp"] -= dealt
                     self.echo["boss_damage"] += dealt
+                    self.echo_pending_reward += dealt * 0.06
                     if self.guardian["hp"] == 0:
                         self.floor_cleared = True
                         self.guardian["cleared"] = True
@@ -691,6 +799,7 @@ class BrowserWorldState(coop_server.CoopState):
                         target["hp"] = target["max_hp"]
             if self.save_path and now - self.last_save_at >= 5:
                 self.save_all()
+                self.echo_learner.save()
                 self.last_save_at = now
 
     def snapshot(self) -> dict:
@@ -703,6 +812,7 @@ class BrowserWorldState(coop_server.CoopState):
                     "loot": [dict(item) for item in self.loot],
                     "echo": dict(self.echo),
                     "echo_progress": self.echo_progress(),
+                    "echo_learning": self.echo_learner.snapshot(self.echo_previous_state),
                     "unique_encounter": dict(self.unique_encounter),
                     "npcs": [dict(npc) for npc in self.NPCS],
                     "chests": [{"id": chest["id"], "x": chest["x"], "y": chest["y"]} for chest in self.chests],
@@ -793,6 +903,7 @@ async def world_loop(app: web.Application):
     with contextlib.suppress(asyncio.CancelledError):
         await task
     coop_server.STATE.save_all()
+    coop_server.STATE.echo_learner.save()
 
 
 def make_app(max_players: int, save_path: Path | None = SAVE_PATH) -> web.Application:

@@ -48,7 +48,22 @@
     <div class="progress-row"><span>Boss training</span><div><i id="echo-boss"></i></div><b id="echo-boss-text">0%</b></div>
     <div class="progress-row"><span>Party support</span><div><i id="echo-support"></i></div><b id="echo-support-text">0%</b></div>
     <div class="overall">Overall mastery <strong id="echo-overall">0%</strong></div>
-    <small>At 85%, Echo is ready for more enemies, floors, skills, or quests. Press P to close.</small>
+    <section class="learning-debugger">
+      <h3>Live Q-Learning Debugger</h3>
+      <div class="learning-grid">
+        <div><span>State</span><strong id="echo-ml-state">waiting</strong></div>
+        <div><span>Chosen action</span><strong id="echo-ml-action">patrol</strong></div>
+        <div><span>Last reward</span><strong id="echo-ml-reward">0</strong></div>
+        <div><span>Total reward</span><strong id="echo-ml-total">0</strong></div>
+        <div><span>Exploration ε</span><strong id="echo-ml-epsilon">0.28</strong></div>
+        <div><span>Learned states</span><strong id="echo-ml-states">0</strong></div>
+        <div><span>Decisions / updates</span><strong id="echo-ml-decisions">0 / 0</strong></div>
+        <div><span>Q-value change</span><strong id="echo-ml-change">0</strong></div>
+      </div>
+      <div class="q-values"><span>Action values for this state</span><div id="echo-q-values">No values learned yet.</div></div>
+      <small>Higher Q-values mean Echo currently expects a better long-term result from that action.</small>
+    </section>
+    <small>At 85%, Echo is ready for more content. Its Q-table saves between server restarts. Press P to close.</small>
   </div>
   <div id="character-panel" class="progress-panel character-panel hidden">
     <div class="panel-heading">
