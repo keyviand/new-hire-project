@@ -918,7 +918,7 @@ def make_app(max_players: int, save_path: Path | None = SAVE_PATH) -> web.Applic
 
 def main() -> None:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--host", default="0.0.0.0")
+    parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=8000)
     parser.add_argument("--max-players", type=int, default=4)
     parser.add_argument("--no-save", action="store_true", help="Disable character persistence for automated tests.")

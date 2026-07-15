@@ -163,7 +163,7 @@ class ThreadingCoopServer(socketserver.ThreadingTCPServer):
 def main() -> None:
     global STATE
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--host", default="0.0.0.0")
+    parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", type=int, default=7777)
     parser.add_argument("--max-players", type=int, default=4)
     args = parser.parse_args()
